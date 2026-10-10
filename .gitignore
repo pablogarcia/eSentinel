@@ -1,0 +1,16 @@
+target/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+.env
+.env.*
+!.env.example
+# Material criptografico y secretos: NUNCA en Git
+*.p12
+*.pfx
+*.jks
+*.pem
+*.key
+*.csr
+secrets/

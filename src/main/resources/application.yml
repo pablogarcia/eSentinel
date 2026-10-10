@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: fiscal-invoicing-service
+  datasource:
+    # Usuario de la aplicacion: miembro de fiscal_app_role, sin BYPASSRLS ni propiedad de tablas.
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/e_sentinel}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345}
+  flyway:
+    # Migraciones con el usuario propietario (credenciales distintas a las de la app).
+    url: ${FLYWAY_URL:${DB_URL:jdbc:postgresql://localhost:5432/e_sentinel}}
+    user: ${FLYWAY_USER:postgres}
+    password: ${FLYWAY_PASSWORD:12345}
+  jackson:
+    default-property-inclusion: non_null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Obligatorio: emisor OIDC (Keycloak/Cognito/Auth0). Sin esto la app no arranca (fail-fast).
+          issuer-uri: ${OIDC_ISSUER_URI}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+logging:
+  pattern:
+    level: "%5p [corr=%X{correlationId:-}]"
+
+solid:
+  fiscal:
+    security:
+      tenant-claim: tenant_id
+      roles-claim: roles
+    outbox:
+      relay:
+        enabled: true
+        interval-ms: 1000
+        batch-size: 100
+      kafka:
+        enabled: false
+        topic-prefix: "solid.fiscal."
