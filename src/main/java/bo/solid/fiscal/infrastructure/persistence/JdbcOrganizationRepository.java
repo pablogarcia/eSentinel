@@ -75,6 +75,12 @@ class JdbcOrganizationRepository
         return jdbc.sql(COMPANY_SELECT + " ORDER BY created_at").query(COMPANY_MAPPER).list();
     }
 
+    @Override
+    public void updateSystemCode(UUID companyId, String systemCode) {
+        jdbc.sql("UPDATE company SET system_code = ?, version = version + 1, updated_at = now() WHERE id = ?")
+                .params(systemCode, companyId).update();
+    }
+
     private static final String COMPANY_SELECT = """
             SELECT id, tenant_id, nit, razon_social, environment, modality, system_code, status, version, created_at
             FROM company""";

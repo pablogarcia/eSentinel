@@ -34,4 +34,9 @@ class HexagonalArchitectureTest {
     @ArchTest
     static final ArchRule no_soap_or_sql_in_controllers = noClasses().that().resideInAPackage("..interfaces..")
             .should().dependOnClassesThat().resideInAnyPackage("java.sql..", "org.springframework.jdbc..", "jakarta.xml.ws..");
+
+    @ArchTest
+    static final ArchRule generated_soap_stubs_are_confined_to_the_siat_adapter = noClasses().that()
+            .resideOutsideOfPackage("..infrastructure.siat..").should().dependOnClassesThat()
+            .resideInAPackage("..infrastructure.siat.generated..");
 }

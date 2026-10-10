@@ -38,7 +38,7 @@ Notas de seguridad: el token delegado y el .p12 no deben pegarse en chat ni en G
 |---|---|---|
 | P-01 | Reenviar `recepcionFactura` con el mismo CUF/archivo ¿rechaza, devuelve la misma recepción o duplica? | ADR-0005 |
 | P-02 | Reutilizar un `numeroFactura` en otro POS/sucursal | ADR-0006 |
-| P-03 | Header de autenticación: `apikey: TokenApi <t>` vs `Authorization: Token <t>` | Adaptador |
+| P-03 | Header de autenticación: `apikey: TokenApi <t>` vs `Authorization: Token <t>` | **CERRADA parcialmente 2026-10-10:** `apikey` es el reconocido; falta confirmar el prefijo con token real (ADR-0011) |
 | P-04 | ¿Se puede pedir CUFD antes de vencer el actual? ¿devuelve el mismo? | ADR-0007 |
 | P-05 | ¿Qué servicio recibe Compra-Venta electrónica: `ServicioFacturacionCompraVenta` o `…Electronica`? | ADR-0003 |
 | P-06 | Qué casos de 904 invalidan la factura y cuáles son advertencias | Máquina de estados |

@@ -10,4 +10,5 @@ public interface CompanyRepository {
     void insert(Company company);
     Optional<Company> findCompany(UUID id);
     List<Company> findAllCompanies();
+    void updateSystemCode(UUID companyId, String systemCode);
 }

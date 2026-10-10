@@ -1,5 +1,6 @@
 package bo.solid.fiscal.infrastructure.tenancy;
 
+import java.time.Clock;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,5 +14,10 @@ public class TenancyConfig {
     @Bean
     PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new TenantAwareTransactionManager(dataSource);
+    }
+
+    @Bean
+    Clock clock() {
+        return Clock.systemUTC();
     }
 }

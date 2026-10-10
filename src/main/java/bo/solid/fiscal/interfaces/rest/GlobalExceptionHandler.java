@@ -29,8 +29,12 @@ class GlobalExceptionHandler {
             case CONFLICT -> HttpStatus.CONFLICT;
             case UNPROCESSABLE -> HttpStatus.UNPROCESSABLE_ENTITY;
             case UNAUTHENTICATED -> HttpStatus.UNAUTHORIZED;
+            case UPSTREAM_UNAVAILABLE -> HttpStatus.SERVICE_UNAVAILABLE;
+            case UPSTREAM_TIMEOUT -> HttpStatus.GATEWAY_TIMEOUT;
+            case UPSTREAM_REJECTED -> HttpStatus.BAD_GATEWAY;
+            case SIAT_REJECTED -> HttpStatus.UNPROCESSABLE_ENTITY;
         };
-        return build(status, e.code(), e.category(), e.getMessage(), List.of());
+        return build(status, e.code(), e.category(), e.getMessage(), e.details());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

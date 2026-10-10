@@ -92,6 +92,20 @@ public class OrganizationService {
         return company;
     }
 
+    /** codigoSistema entregado por el SIN al registrar el sistema en el portal SIAT. */
+    @Transactional
+    public Company setSystemCode(UUID companyId, String systemCode) {
+        UUID tenantId = TenantContext.require();
+        Company before = companies.findCompany(companyId)
+                .orElseThrow(() -> FiscalException.notFound("ORG_002", "Empresa no encontrada"));
+        if (systemCode == null || systemCode.isBlank() || systemCode.length() > 100) {
+            throw FiscalException.unprocessable("ORG_011", "codigoSistema invalido (1..100 caracteres)");
+        }
+        companies.updateSystemCode(companyId, systemCode.strip());
+        audit.record(tenantId, "SystemCodeAssigned", "COMPANY", companyId, null, before.systemCode(), systemCode.strip());
+        return companies.findCompany(companyId).orElseThrow();
+    }
+
     @Transactional(readOnly = true)
     public Company getCompany(UUID id) {
         TenantContext.require();

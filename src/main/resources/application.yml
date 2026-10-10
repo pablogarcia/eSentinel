@@ -35,6 +35,18 @@ solid:
     security:
       tenant-claim: tenant_id
       roles-claim: roles
+    crypto:
+      # Llavero local AES-256 (dev/test). Env: SOLID_FISCAL_CRYPTO_ACTIVE_KEY_ID, SOLID_FISCAL_CRYPTO_KEYS_<ID>=<base64 32 bytes>
+      active-key-id: ${SOLID_FISCAL_CRYPTO_ACTIVE_KEY_ID:}
+    siat:
+      endpoints:
+        pilot: https://pilotosiatservicios.impuestos.gob.bo/v2
+        # URL de produccion pendiente de confirmacion oficial (se entrega al finalizar la autorizacion).
+        production: https://siatrest.impuestos.gob.bo/v2
+      connect-timeout-ms: 5000
+      receive-timeout-ms: 15000
+      auth-header-name: apikey
+      auth-header-prefix: "TokenApi "
     outbox:
       relay:
         enabled: true

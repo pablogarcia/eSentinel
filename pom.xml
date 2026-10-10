@@ -18,6 +18,7 @@
     <properties>
         <java.version>21</java.version>
         <archunit.version>1.4.1</archunit.version>
+        <cxf.version>4.2.4</cxf.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,16 @@
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
@@ -100,6 +111,53 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Clientes SOAP generados desde los WSDL v2 del SIAT versionados en src/main/resources/siat/wsdl/v2 -->
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>${cxf.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-siat-clients</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <configuration>
+                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/siat/wsdl/v2/FacturacionCodigos.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/=bo.solid.fiscal.infrastructure.siat.generated.codigos</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/FacturacionCodigos=bo.solid.fiscal.infrastructure.siat.generated.codigos</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/siat/wsdl/v2/FacturacionSincronizacion.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/=bo.solid.fiscal.infrastructure.siat.generated.sincronizacion</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/FacturacionSincronizacion=bo.solid.fiscal.infrastructure.siat.generated.sincronizacion</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/siat/wsdl/v2/FacturacionOperaciones.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/=bo.solid.fiscal.infrastructure.siat.generated.operaciones</extraarg>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>https://siat.impuestos.gob.bo/FacturacionOperaciones=bo.solid.fiscal.infrastructure.siat.generated.operaciones</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <!-- *Test = unitarios (surefire); *IT = integracion con Testcontainers (failsafe) -->
             <plugin>
